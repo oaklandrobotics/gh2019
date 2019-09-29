@@ -1,6 +1,7 @@
 #ifndef BIGBOI_H
 #define BIGBOI_H
 
+#include "Arduino.h"
 // Sabertooth declarations
 #define SABER_ADDR          130
 
@@ -24,16 +25,7 @@
 #define SET_RAMPING         0x10
 #define SET_DEADBAND        0x11
 
-// Function for writing to Sabertooth 2x60 via Serial1 port.
-#ifndef SENDER
-void saberCom(uint16_t addr, uint8_t command, uint8_t data) {
-  uint8_t chksum;
-  chksum = (addr + command + data) & 0b01111111;
-  Serial2.write(addr);
-  Serial2.write(command);
-  Serial2.write(data);
-  Serial2.write(chksum);
-}
-#endif 
+void saberCom(uint16_t addr, uint8_t command, uint8_t data);
+void driveMotors(uint8_t states[]);
 
 #endif

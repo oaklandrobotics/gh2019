@@ -42,40 +42,65 @@ void msg_recv_cb(const uint8_t *mac_addr, const uint8_t *data, int len)
     esp_now_msg_t msg;
     memcpy(&msg, data, len);
 
-#ifndef SENDER
-    if (msg.addr_send != ESP_ADDR && msg.addr_recv == ESP_ADDR) {
-      // Not from itself, and intended for it.
-      int datVal = (int) msg.data;
-      for (int i = 9; i >= 0; i--) {
-        int testVal = pow(2, i);
-        if (datVal / testVal != 0) {
-           datVal -= testVal;
-           states[9 - i] = 1;
-        } else {
-          states[9 - i] = 0;
+#ifdef MASTER
+    if (slave_sel == 0) { // Not paired
+      if (msg.addr_master == ESP_ADDR) {
+        slave_sel = msg.addr_slave;
+        states[9] = 1;
+
+        // Send acceptance
+        esp_now_msg_t msg = create_msg(slave_sel, ESP_ADDR, states);
+        for (int i = 0; i < 1; i++) {
+          send_msg(&msg);
         }
-        Serial.print(states[9 - i]);
+
+      }
+    }
+
+#endif
+
+#ifndef MASTER
+    if (msg.addr_slave == ESP_ADDR) {
+      if (msg.addr_master == pot_master && master_sel == 8) {
+        // Cool, pair devices
+        master_sel = pot_master;
+      }
+      if (msg.addr_master == master_sel) {
+
+        Serial.print(msg.addr_slave);
         Serial.print(" | ");
-      }
-      Serial.println(" ");
+        Serial.print(msg.addr_master);
+        Serial.print(" | ");
+        Serial.print(msg.data);
+        Serial.print(" | ");
+        Serial.println(msg.chksum);
+        // Not from itself, and intended for it.
+        int datVal = (int) msg.data;
+        for (int i = 9; i >= 0; i--) {
+          int testVal = pow(2, i);
+          if (datVal / testVal != 0) {
+            datVal -= testVal;
+            states[9 - i] = 1;
+          } else {
+            states[9 - i] = 0;
+          }
+          Serial.print(states[9 - i]);
+          Serial.print(" | ");
+        }
+        Serial.println(" ");
 
-      
-      /* if (msg.data == 1) {
-        digitalWrite(PIN_LED, HIGH);
-        Serial.println("ON!");
-      }
-      else {
-        digitalWrite(PIN_LED, LOW);
-        Serial.println("OFF!");
-      }
 
-      Serial.print(msg.addr_recv);
-      Serial.print(" | ");
-      Serial.print(msg.addr_send);
-      Serial.print(" | ");
-      Serial.print(msg.data);
-      Serial.print(" | ");
-      Serial.println(msg.chksum); */
+        /* if (msg.data == 1) {
+          digitalWrite(PIN_LED, HIGH);
+          Serial.println("ON!");
+          }
+          else {
+          digitalWrite(PIN_LED, LOW);
+          Serial.println("OFF!");
+          }
+
+        */
+      }
     }
 #endif
 
@@ -116,22 +141,22 @@ void send_msg(esp_now_msg_t * msg)
 }
 
 uint16_t createData(uint8_t st[]) {
- uint16_t dat = 0;
- for (int i = 0; i < 10; i++) {
-  dat += (st[i] << (9 - i));
- }
- return dat;
+  uint16_t dat = 0;
+  for (int i = 0; i < 10; i++) {
+    dat += (st[i] << (9 - i));
+  }
+  return dat;
 }
 
-esp_now_msg_t create_msg(uint8_t addr_recv, uint8_t addr_send, uint8_t dat[])
+esp_now_msg_t create_msg(uint8_t addr_slave, uint8_t addr_master, uint8_t dat[])
 {
   esp_now_msg_t msg;
-  msg.addr_recv = addr_recv;
-  msg.addr_send = addr_send;
+  msg.addr_slave = addr_slave;
+  msg.addr_master = addr_master;
   msg.data = createData(dat);
 
   // Compute checksum
-  uint16_t chkSum = (addr_recv << 8) + addr_send;
+  uint16_t chkSum = (addr_slave << 8) + addr_master;
   chkSum = chkSum ^ msg.data;
   msg.chksum = chkSum;
 
