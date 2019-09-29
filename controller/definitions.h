@@ -1,7 +1,7 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-#define MASTER
+//#define MASTER
 #ifndef MASTER
 #define SLAVE
 #endif
@@ -14,7 +14,6 @@
 
 #endif
 
-// INCLUDE AN ARRAY OF PIN VALUES FOR TOUCH -- MAKES THINGS WAY EASIER
 
 #define WIFI_CHANNEL    1
 
@@ -24,9 +23,10 @@
  *  2 - Big Boi
  *  3 - Little Boi
  *  4 - Keyboard
+ *  5 - Littlist Boi
  *  8 - No Master Flag
  */
-#define ESP_ADDR        1
+#define ESP_ADDR        5
 
 
 

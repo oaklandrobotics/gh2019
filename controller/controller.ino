@@ -35,6 +35,10 @@ uint8_t pot_master = 8;
   #if ESP_ADDR == 4
   #include "BL_Keyboard.h"
   #endif
+
+  #if ESP_ADDR == 5
+  #include "littlebot.h"
+  #endif
   
 #include "rfid_tag.h"
 #endif
@@ -55,6 +59,10 @@ void setup() {
   rfid_init();
   #if ESP_ADDR == 4
   keyboard_setup();
+  #endif
+
+  #if ESP_ADDR == 5
+  little_init();
   #endif
 #endif
 
@@ -99,15 +107,16 @@ void loop() {
     esp_now_msg_t msg;
     msg = create_msg(ESP_ADDR, pot_master, states);
     send_msg(&msg);
-    // If something goes wrong, fix line below.
-    delay(500);
-    
   }
 
   
   // Input processing
   #if ESP_ADDR == 2
   driveMotors(states);
+  #endif
+
+  #if ESP_ADDR == 5
+  little_drive(states);
   #endif
 
 #endif
