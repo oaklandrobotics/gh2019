@@ -24,7 +24,7 @@ void keyboard_msg(uint8_t keyb[10]) {
 }
 
 bool keyboard_call(uint8_t out[10]) {
-  if (bleKeyboard.connected()) {
+  if (bleKeyboard.isConnected()) {
     keyboard_msg(out);
   } else {
     

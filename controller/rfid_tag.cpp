@@ -1,4 +1,13 @@
-#include "rfid.h"
+#include "rfid_tag.h"
+
+int block = 2;  
+byte buffer[18];
+byte size = sizeof(buffer);
+int trailerBlock = 3;
+
+MFRC522 mfrc522(SS_PIN, RST_PIN); 
+MFRC522::MIFARE_Key key;          //create a MIFARE_Key struct named 'key', which will hold the card information
+MFRC522::StatusCode status;
 
 void rfid_init() {
 

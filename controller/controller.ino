@@ -29,7 +29,7 @@ uint8_t pot_master = 8;
 
 #ifndef MASTER
 #include "bigboi.h"
-#include "rfid.h"
+#include "rfid_tag.h"
 #include "BL_Keyboard.h"
 #endif
 
