@@ -110,7 +110,7 @@ void send_msg(esp_now_msg_t * msg)
   esp_err_t status = esp_now_send(broadcast_mac, msg_data, packet_size);
   if (ESP_OK != status)
   {
-    Serial.println("Error sending message");
+    //Serial.println("Error sending message");
     handle_error(status);
   }
 }
