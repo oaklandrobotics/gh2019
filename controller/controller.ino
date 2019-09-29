@@ -74,17 +74,17 @@ void setup() {
 
 void loop() {
   // Need some delay for watchdog feeding in loop
-  delay(50);
+  delay(30);
 
 #ifdef MASTER
   Serial.println(slave_sel);
   if (slave_sel != 0) { // have a slave
     // Get values for states.
-    readCap(states);
-//    states[0] = !digitalRead(26);
-//    states[1] = !digitalRead(25);
-//    states[2] = !digitalRead(33);
-//    states[3] = !digitalRead(34);
+    //readCap(states);
+    states[0] = !digitalRead(26);
+    states[1] = !digitalRead(25);
+    states[2] = !digitalRead(33);
+    states[3] = !digitalRead(34);
 
     esp_now_msg_t msg;
     msg = create_msg(slave_sel, ESP_ADDR, states);
