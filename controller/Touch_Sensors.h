@@ -3,8 +3,8 @@
 #define _CapSensor_
 
 const int led[] = {21, 3, 18, 22, 23};
-const int wire[] = {13, 12, 14, 27, 33, 32, 15, 2};
-int cap[] = {30, 38, 40, 30, 30, 35, 35, 35};
+const int wire[] = {0, 14, 12, 13, 2, 15, 33, 27};
+int cap[] = {14, 14, 14, 14, 14, 14, 14, 14};
 
 void readCap(uint8_t output[]){
   int media[] = {0,0,0,0,0,0,0,0,0,0};
