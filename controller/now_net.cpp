@@ -44,7 +44,23 @@ void msg_recv_cb(const uint8_t *mac_addr, const uint8_t *data, int len)
 
 #ifndef SENDER
     if (msg.addr_send != ESP_ADDR && msg.addr_recv == ESP_ADDR) {
-      if (msg.data == 1) {
+      // Not from itself, and intended for it.
+      int datVal = (int) msg.data;
+      for (int i = 9; i >= 0; i--) {
+        int testVal = pow(2, i);
+        if (datVal / testVal != 0) {
+           datVal -= testVal;
+           states[9 - i] = 1;
+        } else {
+          states[9 - i] = 0;
+        }
+        Serial.print(states[9 - i]);
+        Serial.print(" | ");
+      }
+      Serial.println(" ");
+
+      
+      /* if (msg.data == 1) {
         digitalWrite(PIN_LED, HIGH);
         Serial.println("ON!");
       }
@@ -59,7 +75,7 @@ void msg_recv_cb(const uint8_t *mac_addr, const uint8_t *data, int len)
       Serial.print(" | ");
       Serial.print(msg.data);
       Serial.print(" | ");
-      Serial.println(msg.chksum);
+      Serial.println(msg.chksum); */
     }
 #endif
 
@@ -99,16 +115,24 @@ void send_msg(esp_now_msg_t * msg)
   }
 }
 
-esp_now_msg_t create_msg(uint8_t addr_recv, uint8_t addr_send, uint16_t data)
+uint16_t createData(uint8_t st[]) {
+ uint16_t dat = 0;
+ for (int i = 0; i < 10; i++) {
+  dat += (st[i] << (9 - i));
+ }
+ return dat;
+}
+
+esp_now_msg_t create_msg(uint8_t addr_recv, uint8_t addr_send, uint8_t dat[])
 {
   esp_now_msg_t msg;
   msg.addr_recv = addr_recv;
   msg.addr_send = addr_send;
-  msg.data = data;
+  msg.data = createData(dat);
 
   // Compute checksum
   uint16_t chkSum = (addr_recv << 8) + addr_send;
-  chkSum = chkSum ^ data;
+  chkSum = chkSum ^ msg.data;
   msg.chksum = chkSum;
 
   return msg;
