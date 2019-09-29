@@ -28,9 +28,15 @@ uint8_t pot_master = 8;
 #endif
 
 #ifndef MASTER
-#include "bigboi.h"
+  #if ESP_ADDR == 2
+  #include "bigboi.h"
+  #endif
+
+  #if ESP_ADDR == 4
+  #include "BL_Keyboard.h"
+  #endif
+  
 #include "rfid_tag.h"
-#include "BL_Keyboard.h"
 #endif
 
 void setup() {
@@ -43,7 +49,9 @@ void setup() {
 #ifndef MASTER
   Serial2.begin(9600, SERIAL_8N1, 16, 17);
   rfid_init();
+  #if ESP_ADDR == 4
   keyboard_setup();
+  #endif
 #endif
 
   Serial.begin(115200);
@@ -92,13 +100,6 @@ void loop() {
 
   
   // Input processing
-  if (ESP_ADDR == 2) {
-    driveMotors(states);
-  } else if (ESP_ADDR == 3) {
-    // Little Boi
-  } else if (ESP_ADDR == 4) {
-    // Keyboard
-  }
 
 #endif
 
