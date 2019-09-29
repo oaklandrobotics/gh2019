@@ -43,22 +43,24 @@ void msg_recv_cb(const uint8_t *mac_addr, const uint8_t *data, int len)
     memcpy(&msg, data, len);
 
 #ifndef SENDER
-    if (msg.data == 1) {
-      digitalWrite(PIN_LED, HIGH);
-      Serial.println("ON!");
-    }
-    else {
-      digitalWrite(PIN_LED, LOW);
-      Serial.println("OFF!");
-    }
+    if (msg.addr_send != ESP_ADDR && msg.addr_recv == ESP_ADDR) {
+      if (msg.data == 1) {
+        digitalWrite(PIN_LED, HIGH);
+        Serial.println("ON!");
+      }
+      else {
+        digitalWrite(PIN_LED, LOW);
+        Serial.println("OFF!");
+      }
 
-    Serial.print(msg.addr_recv);
-    Serial.print(" | ");
-    Serial.print(msg.addr_send);
-    Serial.print(" | ");
-    Serial.print(msg.data);
-    Serial.print(" | ");
-    Serial.println(msg.chksum);
+      Serial.print(msg.addr_recv);
+      Serial.print(" | ");
+      Serial.print(msg.addr_send);
+      Serial.print(" | ");
+      Serial.print(msg.data);
+      Serial.print(" | ");
+      Serial.println(msg.chksum);
+    }
 #endif
 
   }

@@ -5,7 +5,7 @@
 #define PIN_BUTTON    26
 
 #define WIFI_CHANNEL    1
-#define ESP_ADDR        1
+#define ESP_ADDR        2
 
 // SENDER and RECEIVER are arbitrary with ESP-NOW, this is solely for this example
 //#define SENDER
