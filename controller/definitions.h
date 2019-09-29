@@ -7,7 +7,7 @@
 #endif
 
 #ifdef MASTER
-#define PIN_LED     16
+//#define PIN_LED     16
 #endif
 
 #ifndef MASTER
