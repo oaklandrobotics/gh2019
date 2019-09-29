@@ -44,6 +44,10 @@ void setup() {
 
 #ifdef MASTER
   pinMode(PIN_LED, OUTPUT);
+  pinMode(26, INPUT);
+  pinMode(25, INPUT);
+  pinMode(33, INPUT);
+  pinMode(34, INPUT);
 #endif
 
 #ifndef MASTER
@@ -94,6 +98,7 @@ void loop() {
     // Potential master, send request
     esp_now_msg_t msg;
     msg = create_msg(ESP_ADDR, pot_master, states);
+    send_msg(&msg);
     // If something goes wrong, fix line below.
     delay(500);
     
@@ -101,6 +106,9 @@ void loop() {
 
   
   // Input processing
+  #if ESP_ADDR == 2
+  driveMotors(states);
+  #endif
 
 #endif
 
