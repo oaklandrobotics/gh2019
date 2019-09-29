@@ -65,6 +65,7 @@ void loop() {
   delay(50);
 
 #ifdef MASTER
+  Serial.println(slave_sel);
   if (slave_sel != 0) { // have a slave
     // Get values for states.
     //readCap(states);
