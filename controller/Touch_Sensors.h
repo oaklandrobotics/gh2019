@@ -4,7 +4,7 @@
 
 const int led[] = {21, 3, 18, 22, 23};
 const int wire[] = {33, 14, 12, 13, 0, 15, 2, 27};
-int cap[] = {14, 14, 14, 14, 14, 14, 14, 14};
+int cap[] = {20, 40, 20, 20, 0, 14, 14, 20};
 
 void readCap(uint8_t output[]){
   int media[] = {0,0,0,0,0,0,0,0,0,0};
