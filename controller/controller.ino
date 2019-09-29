@@ -24,11 +24,11 @@ uint8_t pot_master = 8;
 #include "now_net.h"
 
 #ifdef MASTER
-#include "bigboi.h"
 #include "Touch_Sensors.h"
 #endif
 
 #ifndef MASTER
+#include "bigboi.h"
 #include "rfid.h"
 #include "BL_Keyboard.h"
 #endif
@@ -59,7 +59,11 @@ void loop() {
 #ifdef MASTER
   if (slave_sel != 0) { // have a slave
     // Get values for states.
-    readCap(states);
+    //readCap(states);
+    states[0] = !digitalRead(26);
+    states[1] = !digitalRead(25);
+    states[2] = !digitalRead(33);
+    states[3] = !digitalRead(34);
 
     esp_now_msg_t msg;
     msg = create_msg(slave_sel, ESP_ADDR, states);
@@ -81,7 +85,8 @@ void loop() {
     // Potential master, send request
     esp_now_msg_t msg;
     msg = create_msg(ESP_ADDR, pot_master, states);
-    while (
+    // If something goes wrong, fix line below.
+    delay(500);
     
   }
 

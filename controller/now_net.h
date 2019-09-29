@@ -11,6 +11,7 @@
 extern uint8_t states[10];
 extern uint8_t slave_sel;
 extern uint8_t master_sel;
+extern uint8_t pot_master;
 
 typedef struct __attribute__((packed)) esp_now_msg_t
 {

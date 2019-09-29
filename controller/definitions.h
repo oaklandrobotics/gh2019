@@ -26,7 +26,7 @@
  *  4 - Keyboard
  *  8 - No Master Flag
  */
-#define ESP_ADDR        0
+#define ESP_ADDR        1
 
 
 
